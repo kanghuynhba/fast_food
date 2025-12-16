@@ -8,34 +8,34 @@ public class OrderItem {
     private int orderId;
     private int productId;
     private String productName;
-    private int quality;
+    private int quantity;
     private double unitPrice;
     private double subtotal;
 
     // Constructors
 
-    OrderItem() {}
+    public OrderItem() {}
 
-    OrderItem(int productId, String productName, int quality) {
+    public OrderItem(int productId, String productName, int quantity) {
         this.productId=productId; 
         this.productName=productName;
-        this.quality=quality;
+        this.quantity=quantity;
     }
 
-    OrderItem(int orderItemId, int productId, String productName, int quality) {
+    public OrderItem(int orderItemId, int productId, String productName, int quantity) {
         this.orderItemId=orderItemId;
         this.productId=productId; 
         this.productName=productName;
-        this.quality=quality;
+        this.quantity=quantity;
     }
 
-    OrderItem(int orderId, int orderItemId, int productId, String productName, 
-            int quality, double unitPrice, double subtotal) {
+    public OrderItem(int orderId, int orderItemId, int productId, String productName, 
+            int quantity, double unitPrice, double subtotal) {
         this.orderId=orderId;
         this.orderItemId=orderItemId;
         this.productId=productId; 
         this.productName=productName;
-        this.quality=quality;
+        this.quantity=quantity;
         this.unitPrice=unitPrice;
         this.subtotal=subtotal;
     }
