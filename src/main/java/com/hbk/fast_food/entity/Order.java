@@ -5,6 +5,8 @@ import lombok.Data;
 
 @Data
 public class Order {
+    private String customerName;
+    private String phoneNumber;
     private int orderId;
     private double totalAmount;
     private int paymentStatus;  // 0: Unpaid, 1: Paid, 2: Refunded, 3: Failed

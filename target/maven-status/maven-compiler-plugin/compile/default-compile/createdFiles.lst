@@ -1,5 +1,9 @@
 com/hbk/fast_food/App.class
-Product.class
 com/hbk/fast_food/entity/Order.class
+com/hbk/fast_food/entity/Payment.class
+com/hbk/fast_food/entity/Product.class
+com/hbk/fast_food/dao/BaseDAO.class
+com/hbk/fast_food/dao/OrderDAO.class
 com/hbk/fast_food/entity/Cashier.class
 com/hbk/fast_food/entity/OrderItem.class
+com/hbk/fast_food/config/DBConnection.class
