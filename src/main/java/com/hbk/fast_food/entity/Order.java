@@ -1,6 +1,8 @@
 package com.hbk.fast_food.entity;
 
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.sql.Timestamp;
 import lombok.Data;
 
 @Data
@@ -9,12 +11,11 @@ public class Order {
     private String phoneNumber;
     private int orderId;
     private double totalAmount;
-    private int paymentStatus;  // 0: Unpaid, 1: Paid, 2: Refunded, 3: Failed
     private int status;  //  0: PREPARING, 1: READY, 2: CANCELLED
-    private Date createdAt;
-    private Date updatedAt;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
     private List<OrderItem> items=new ArrayList<>();
-    
+   
     public String getStatusName() {
         return switch (status) {
             case 0 -> "PREPARING";
@@ -24,11 +25,7 @@ public class Order {
         };
     }
 
-    public boolean isPaid() {
-        return paymentStatus==1;
-    }
-
     public boolean isCompleted() {
-        return status==5;
+        return status==2;
     }
 }
