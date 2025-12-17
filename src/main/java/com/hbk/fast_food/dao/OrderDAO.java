@@ -24,6 +24,8 @@ public class OrderDAO implements BaseDAO<Order>{
             ps.setString(2, order.getPhoneNumber());
             ps.setDouble(3, order.getTotalAmount());
             ps.setInt(4, order.getStatus());
+
+            System.out.println(ps.toString());
             
             int result = ps.executeUpdate();
             
