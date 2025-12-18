@@ -59,8 +59,8 @@ public class CashierMainFrame extends JFrame {
         showPanel("pos");
     }
     
-    // ============ SIDEBAR LOGIC ============
-    
+    // Sidebar logic 
+
     private JPanel createSidebar() {
         JPanel sidebar = new JPanel();
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
@@ -124,7 +124,7 @@ public class CashierMainFrame extends JFrame {
         return btn;
     }
     
-    // ============ NAVIGATION LOGIC ============
+    // Navigation
     
     public void showPanel(String panelName) {
         // 1. Switch Card
@@ -145,7 +145,7 @@ public class CashierMainFrame extends JFrame {
         }
     }
     
-    // ============ MAIN ============
+    // Main
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

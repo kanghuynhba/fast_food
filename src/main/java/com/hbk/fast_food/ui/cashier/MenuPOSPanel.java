@@ -13,11 +13,13 @@ import com.hbk.fast_food.ui.components.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.*;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.io.File;
 
 public class MenuPOSPanel extends JPanel {
     
@@ -187,42 +189,135 @@ public class MenuPOSPanel extends JPanel {
     }
 
     // Creates the simple visual card for a product
+    // private JPanel createProductCard(Product p) {
+    //     JPanel card = new JPanel(new BorderLayout());
+    //     card.setBackground(Color.WHITE);
+    //     card.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+    //     card.setPreferredSize(new Dimension(150, 150));
+
+    //     int targetHeight = 100;
+
+    //     JLabel imageLabel = new JLabel();
+    //     imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    //     imageLabel.setPreferredSize(new Dimension(0, targetHeight)); // Width 0 means flexible in some layouts        
+    //     String imagePath = "../../../../../../../resources" + p.getImageUrl(); 
+    //     File imageFile = new File(imagePath);
+
+    //     // 2. Check if the file actually exists
+    //     if (imagePath != null && !imagePath.isEmpty() && imageFile.exists()) {
+    //         try {
+    //             // Load the image
+    //             ImageIcon originalIcon = new ImageIcon(imagePath);
+    //             Image originalImage = originalIcon.getImage();
+
+    //             // Calculate width to maintain aspect ratio based on target height
+    //             // Passing -1 for width tells Java to calculate it automatically
+    //             Image scaledImage = originalImage.getScaledInstance(-1, targetHeight, Image.SCALE_SMOOTH);
+
+    //             // Set the icon
+    //             imageLabel.setIcon(new ImageIcon(scaledImage));
+                
+    //         } catch (Exception e) {
+    //             // If loading fails, just print error and fall through to else (text placeholder)
+    //             System.err.println("Error loading image: " + imagePath);
+    //         }
+    //     } 
+
+    //     // 3. Fallback: If no image found (or no icon set), use the colored box
+    //     if (imageLabel.getIcon() == null) {
+    //         imageLabel.setText(p.getName().substring(0, 1));
+    //         imageLabel.setFont(new Font("SansSerif", Font.BOLD, 40));
+    //         imageLabel.setOpaque(true);
+    //         imageLabel.setBackground(new Color(230, 240, 255)); // Light Blue
+    //         imageLabel.setForeground(Color.BLACK); // Ensure text is visible
+    //     }
+
+    //     // Info
+    //     JPanel info = new JPanel(new GridLayout(2, 1));
+    //     info.setBackground(Color.WHITE);
+
+    //     info.add(new ProductLabel(p.getName(), Color.BLACK));
+
+    //     JLabel priceLbl = new ProductLabel(formatMoney(p.getPrice()), Color.BLACK);
+    //     info.add(priceLbl);
+
+    //     card.add(imageLable, BorderLayout.CENTER);
+    //     card.add(info, BorderLayout.SOUTH);
+
+    //     // Click to Add
+    //     card.addMouseListener(new java.awt.event.MouseAdapter() {
+    //         public void mouseClicked(java.awt.event.MouseEvent e) {
+    //             addToCart(p);
+    //         }
+    //     });
+
+    //     return card;
+    // }
+    //
     private JPanel createProductCard(Product p) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(Color.WHITE);
         card.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         card.setPreferredSize(new Dimension(150, 150));
 
-        // Simple Placeholder (Colored Box with Letter)
-        JLabel imagePlaceholder = new JLabel(p.getName().substring(0, 1));
-        imagePlaceholder.setFont(new Font("SansSerif", Font.BOLD, 40));
-        imagePlaceholder.setHorizontalAlignment(SwingConstants.CENTER);
-        imagePlaceholder.setOpaque(true);
-        imagePlaceholder.setBackground(new Color(230, 240, 255)); // Light Blue
-        imagePlaceholder.setPreferredSize(new Dimension(0, 100));
+        int targetHeight = 100;
 
-        // Info
+        JLabel imageLabel = new JLabel();
+        imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        imageLabel.setPreferredSize(new Dimension(0, targetHeight)); 
+
+        java.net.URL imgUrl = getClass().getClassLoader().getResource(p.getImageUrl());
+
+        boolean imageLoaded = false;
+
+        if (imgUrl != null) {
+            try {
+                ImageIcon originalIcon = new ImageIcon(imgUrl);
+                Image originalImage = originalIcon.getImage();
+
+                // Check if image actually loaded successfully (width > -1)
+                if (originalIcon.getIconWidth() > 0) {
+                    Image scaledImage = originalImage.getScaledInstance(-1, targetHeight, Image.SCALE_SMOOTH);
+                    imageLabel.setIcon(new ImageIcon(scaledImage));
+                    imageLoaded = true;
+                }
+            } catch (Exception e) {
+                System.err.println("Error loading image: " + p.getImageUrl());
+            }
+        }
+
+        // --- FALLBACK ---
+        if (!imageLoaded) {
+            imageLabel.setText(p.getName().substring(0, 1));
+            imageLabel.setFont(new Font("SansSerif", Font.BOLD, 40));
+            imageLabel.setOpaque(true);
+            imageLabel.setBackground(new Color(230, 240, 255)); 
+            imageLabel.setForeground(Color.BLACK); 
+        }
+
+        // Info Panel
         JPanel info = new JPanel(new GridLayout(2, 1));
         info.setBackground(Color.WHITE);
 
-        info.add(new ProductLabel(p.getName(), Color.BLACK));
+        info.add(new ProductLabel(p.getName(), Color.BLACK)); // Assuming ProductLabel is a custom JLabel
+        
+        // Format money helper
+        // info.add(new JLabel(String.format("%,.0f VND", p.getPrice()))); 
+        info.add(new ProductLabel(String.valueOf(p.getPrice()), Color.ORANGE));
 
-        JLabel priceLbl = new ProductLabel(formatMoney(p.getPrice()), Color.BLACK);
-        info.add(priceLbl);
-
-        card.add(imagePlaceholder, BorderLayout.CENTER);
+        // --- FIX: TYPO (imageLable -> imageLabel) ---
+        card.add(imageLabel, BorderLayout.CENTER);
         card.add(info, BorderLayout.SOUTH);
 
         // Click to Add
-        card.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent e) {
+        card.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
                 addToCart(p);
             }
         });
 
         return card;
     }
-
     private void addToCart(Product p) {
         cart.addProduct(p);
         updateCartUI();

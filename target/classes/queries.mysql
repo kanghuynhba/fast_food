@@ -1,0 +1,73 @@
+-- Create Database
+CREATE DATABASE IF NOT EXISTS fast_food_db;
+USE fast_food_db;
+
+-- 1. Create 'products' table first (referenced by order_items)
+CREATE TABLE products (
+    product_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    price DECIMAL(10, 2) NOT NULL, -- Using DECIMAL for currency
+    category VARCHAR(100),
+    image_url VARCHAR(500),
+    available INT DEFAULT 1,       -- 1 = Available, 0 = Unavailable
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. Create 'orders' table (referenced by order_items)
+CREATE TABLE orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_name VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(20),
+    total_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    status INT DEFAULT 0,          -- e.g., 0: Pending, 1: Paid, 2: Cancelled
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- 3. Create 'order_items' table (Links Orders and Products)
+CREATE TABLE order_items (
+    order_item_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    product_name VARCHAR(255),     -- Snapshot of name in case product changes later
+    quantity INT NOT NULL DEFAULT 1,
+    unit_price DECIMAL(10, 2) NOT NULL,
+    subtotal DECIMAL(10, 2) NOT NULL,
+    
+    -- Foreign Key Constraints
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
+);
+
+INSERT INTO products (product_id, name, description, price, category, image_url, available, created_at) VALUES
+(1, 'Combo Cùng Vui', 'Combo 6 Miếng Gà Rán Tặng kèm 3 lon Pepsi', 199000.00, 'Combo', 'images/1.jpg', 1, '2025-11-23 15:40:33'),
+(2, 'HD_Combo Đậm Vị', '1 Miếng Gà Xốt Mắm Tỏi + 1 Miếng Gà Rán + 1 Mì Migaxuxi + 1 Khoai Tây Chiên (vừa) + 2 Ly Pepsi (vừa) + 1 Túi Tote', 159000.00, 'Combo', 'images/2.jpg', 1, '2025-11-23 15:40:34'),
+(3, 'HD_Combo Đậm Đà', '1 Miếng Gà Xốt Mắm Tỏi + 1 Burger Tôm/ 1 Burger Zinger + 1 Ly Pepsi (tiêu chuẩn)', 89000.00, 'Combo', 'images/3.jpg', 1, '2025-11-23 15:40:34'),
+(4, '1 Gà Lắc BBQ', 'Gà rán giòn rụm kết hợp cùng hương vị BBQ đậm đà, thơm ngon, ai cũng muốn xin miếng!', 40000.00, 'Chicken', 'images/4.jpg', 1, '2025-11-23 15:40:34'),
+(5, '2 Gà Lắc BBQ', 'Gà rán giòn rụm kết hợp cùng hương vị BBQ đậm đà, thơm ngon, ai cũng muốn xin miếng!', 79000.00, 'Chicken', 'images/5.jpg', 1, '2025-11-23 15:40:34'),
+(6, '3 Gà Lắc BBQ', 'Gà rán giòn rụm kết hợp cùng hương vị BBQ đậm đà, thơm ngon, ai cũng muốn xin miếng!', 114000.00, 'Chicken', 'images/6.jpg', 1, '2025-11-23 15:40:34'),
+(7, '1 Cơm Gà Lắc BBQ', 'Gà rán BBQ giòn rụm kết hợp cùng cơm trắng dẻo thơm, ngon không thể cưỡng.', 52000.00, 'Chicken', 'images/7.jpg', 1, '2025-11-23 15:40:34'),
+(8, 'Combo Ngon "Điênnn"', '1 Miếng Gà + 1 Khoai tây chiên (vừa) + 1 Ly Pepsi (tiêu chuẩn)', 79000.00, 'Combo', 'images/8.jpg', 1, '2025-11-23 15:40:34'),
+(9, 'Combo Vui "Điênnn"', '2 Miếng Gà + 1 Khoai tây chiên (vừa) + 2 Ly Pepsi (tiêu chuẩn)', 109000.00, 'Combo', 'images/9.jpg', 1, '2025-11-23 15:40:34'),
+(10, 'Combo Quẩy "Điênnn"', '2 Gà Lắc BBQ + 1 Gà Viên Popcorn (R) + 1 Khoai tây chiên (vừa) + 2 Ly Pepsi (tiêu chuẩn)', 139000.00, 'Combo', 'images/10.jpg', 1, '2025-11-23 15:40:34'),
+(11, 'Combo Xịn "Điênnn"', '3 Gà Lắc BBQ + 1 Khoai tây chiên (vừa) + 2 Ly Pepsi (tiêu chuẩn)', 149000.00, 'Combo', 'images/11.jpg', 1, '2025-11-23 15:40:34'),
+(12, 'Khoai Lắc Phô Mai (L)', 'Khoai tây chiên giòn tan, lắc đều cùng phô mai thơm ngậy, cho vị ngon xuất shake!!!', 32000.00, 'Sides', 'images/12.jpg', 1, '2025-11-23 15:40:34'),
+(13, 'Khoai Lắc Bơ Tỏi (L)', 'Khoai tây chiên giòn tan, lắc đều cùng bơ tỏi thơm lừng, cho vị ngon xuất shake!!!', 32000.00, 'Sides', 'images/13.jpg', 1, '2025-11-23 15:40:34'),
+(14, 'Gà Popcorn Lắc Phô Mai (R)', 'Gà Popcorn giòn rụm, lắc đều cùng phô mai thơm ngậy, cho vị ngon xuất shake!!!', 42000.00, 'Sides', 'images/14.jpg', 1, '2025-11-23 15:40:34'),
+(15, 'Gà Popcorn Lắc Bơ Tỏi (R)', 'Gà Popcorn giòn rụm, lắc đều cùng bơ tỏi thơm lừng, cho vị ngon xuất shake!!!', 42000.00, 'Sides', 'images/15.jpg', 1, '2025-11-23 15:40:34'),
+(16, 'Salad Xốt Mè Rang', '1 Salad Xốt Mè Rang', 22000.00, 'Sides', 'images/16.jpg', 1, '2025-11-23 15:40:34'),
+(17, 'Salad Hạt Gà Viên', '1 Salad Hạt Gà Viên', 37000.00, 'Sides', 'images/17.jpg', 1, '2025-11-23 15:40:34'),
+(18, '1 Miếng Gà Xốt Mắm Tỏi', 'Gà rán giòn tan, quyện thêm xốt mắm tỏi đậm đà, cay cay, ngọt ngọt, thơm nồng nàn từ tỏi và ớt.', 40000.00, 'Chicken', 'images/18.jpg', 1, '2025-11-23 15:40:34'),
+(19, '2 Miếng Gà Xốt Mắm Tỏi', 'Gà rán giòn tan, quyện thêm xốt mắm tỏi đậm đà, cay cay, ngọt ngọt, thơm nồng nàn từ tỏi và ớt.', 79000.00, 'Chicken', 'images/19.jpg', 1, '2025-11-23 15:40:34'),
+(20, '3 Miếng Gà Xốt Mắm Tỏi', 'Gà rán giòn tan, quyện thêm xốt mắm tỏi đậm đà, cay cay, ngọt ngọt, thơm nồng nàn từ tỏi và ớt.', 116000.00, 'Chicken', 'images/20.jpg', 1, '2025-11-23 15:40:34'),
+(21, '1 Phần Cơm Gà Xốt Mắm Tỏi', 'Gà rán giòn tan, quyện thêm xốt mắm tỏi đậm đà, cay cay, ngọt ngọt, thơm nồng nàn từ tỏi và ớt ăn kèm cơm nóng dẻo.', 52000.00, 'Chicken', 'images/21.jpg', 1, '2025-11-23 15:40:34'),
+(22, 'Mì Migaxuxi', '1 Mì Migaxuxi', 35000.00, 'Rice', 'images/22.jpg', 1, '2025-11-23 15:40:34'),
+(23, 'Mì Migaxuxi Gà Viên', '1 Mì Migaxuxi Gà Viên', 40000.00, 'Chicken', 'images/23.jpg', 1, '2025-11-23 15:40:34'),
+(24, 'Mì Migaxuxi Gà Rán', '1 Mì Migaxuxi Gà Rán', 64000.00, 'Chicken', 'images/24.jpg', 1, '2025-11-23 15:40:34'),
+(25, 'Migaxuxi Đôi', '2 Mì Migaxuxi + 2 Miếng Gà Rán + 1 Khoai Tây Chiên (Vừa) + 2 Pepsi (vừa)', 169000.00, 'Combo', 'images/25.jpg', 1, '2025-11-23 15:40:34'),
+(26, 'Xốt Phô mai Cay Bùng Cháy', '1 gói xốt Phô mai Cay', 5000.00, 'Other', 'images/26.jpg', 1, '2025-11-23 15:40:34'),
+(27, 'Xốt Yuzu Thanh Mát', '1 gói xốt Yuzu Thanh Mát', 5000.00, 'Other', 'images/27.jpg', 1, '2025-11-23 15:40:34'),
+(28, 'COMBO YOLO', '1 Burger Gà Yo + 1 Khoai Tây Chiên (vừa) + 1 Pepsi (vừa)', 85000.00, 'Combo', 'images/28.jpg', 1, '2025-11-23 15:40:34'),
+(29, 'COMBO YO GIÒN', '1 Burger Gà Yo + 1 Miếng Gà Rán + 1 Pepsi (vừa)', 95000.00, 'Combo', 'images/29.jpg', 1, '2025-11-23 15:40:34'),
+(30, 'COMBO YO NO', '1 phần Burger Gà Yo + 2 Miếng Gà + 1 Khoai Tây Chiên', 145000.00, 'Rice', 'images/30.jpg', 1, '2025-11-23 15:40:34');
