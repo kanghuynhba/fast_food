@@ -7,9 +7,9 @@ import lombok.Data;
 
 @Data
 public class Order {
-    private String customerName;
-    private String phoneNumber;
     private int orderId;
+    private String customerName="";
+    private String phoneNumber="";
     private double totalAmount;
     private int status;  //  0: PREPARING, 1: READY, 2: CANCELLED
     private Timestamp createdAt;

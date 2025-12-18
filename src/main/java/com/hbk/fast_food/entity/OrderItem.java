@@ -16,28 +16,10 @@ public class OrderItem {
 
     public OrderItem() {}
 
-    public OrderItem(int productId, String productName, int quantity) {
-        this.productId=productId; 
-        this.productName=productName;
-        this.quantity=quantity;
-    }
-
-    public OrderItem(int orderItemId, int productId, String productName, int quantity) {
-        this.orderItemId=orderItemId;
-        this.productId=productId; 
-        this.productName=productName;
-        this.quantity=quantity;
-    }
-
-    public OrderItem(int orderId, int orderItemId, int productId, String productName, 
-            int quantity, double unitPrice, double subtotal) {
+    public OrderItem(int orderId, int productId, String productName, int quantity) {
         this.orderId=orderId;
-        this.orderItemId=orderItemId;
         this.productId=productId; 
         this.productName=productName;
         this.quantity=quantity;
-        this.unitPrice=unitPrice;
-        this.subtotal=subtotal;
     }
-
 }
